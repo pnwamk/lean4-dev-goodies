@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# the executable name is whatever link is running this
+EXE="`basename \"$0\"`"
+
+if [[ "$LEAN4HOME" = "" ]]; then
+   echo "$EXE: LEAN4HOME has not been set." 1>&2; exit -1
+fi
+if [[ ! -d "$LEAN4HOME" ]]; then
+ echo "$EXE: LEAN4HOME directory does not exist: $LEAN4HOME" 1>&2; exit -11
+fi
+
+export LEAN4HOME
+
+# or run this script and give it an executable argument
+if [[ "$EXE" = "lean4-dev-bin" && "$1" != "" ]]; then EXE="$1"; shift; fi
+
+
+BIN="$LEAN4HOME/bin/$EXE"
+
+if [[ -x "$BIN" ]]; then
+    exec "$BIN" "$@"
+else
+    echo "$NAME: no executable at \"$BIN\"."
+    exit -1
+fi
